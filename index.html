@@ -11,9 +11,19 @@
     <h1>Simulador Interactivo</h1>
     <form action="">
         <label for="edad">Edad <input type="number" id="edad"></label>
-        <label for="cob_accidente">Accidente <input type="checkbox" name="" id="cob_accidente"></label>
-        <label for="cob_vida">Vida <input type="checkbox" name="" id="cob_vida"></label>
-        <label for="cob_salud">Prepaga <input type="checkbox" name="" id="cob_salud"></label>
+        <div>
+            <label for="cob_accidente">Accidente <input type="checkbox" name="" id="cob_accidente"></label>
+            <input type="range" min="1" max="100" value="50" class="slider" id="suma_accidente">
+        </div>
+        <div>
+            <label for="cob_vida">Vida <input type="checkbox" name="" id="cob_vida"></label>
+            <input type="range" min="1" max="100" value="50" class="slider" id="suma_vida">
+        </div>
+        <div>
+            <label for="cob_salud">Prepaga <input type="checkbox" name="" id="cob_salud"></label>
+            <input type="range" min="1" max="100" value="50" class="slider" id="suma_salud">
+        </div>
+        
     </form>
 
     <script src="js/main.js"></script>
