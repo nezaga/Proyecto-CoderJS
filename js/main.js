@@ -1,17 +1,17 @@
 //Inicializamos las variables para cotizar
 let edad = 18;
-let cob_accidente = false;
-let cob_vida = false;
-let cob_salud = false;
+let inputEdad = document.getElementById("edad");
+let cob_accidente = true;
+let cob_vida = true;
+let cob_salud = true;
 let tasa;
 let iva = 0.21;
-let quiereCobAccidente;
-let quiereCobVida;
-let quiereCobSalud;
+let quiereCobAccidente = document.getElementById("cob_accidente");
+let quiereCobVida = document.getElementById("cob_vida");
+let quiereCobSalud = document.getElementById("cob_salud");
 let sumaAccidente = 2000000;
 let sumaVida = 10000000;
 let sumaSalud = 1000000;
-
 
 //Definimos la clase Cobertura.
 class Cobertura {
@@ -27,50 +27,56 @@ class Cobertura {
 
 // Creo los 3 objetos Coberturas y se agrega al array
 function elegirCobAccidente(seleccionCob) {
-    quiereCobAccidente = prompt("¿Desea tener cobertura por accidente? Ingrese S o N").toUpperCase();
-    cob_accidente = stringABool(quiereCobAccidente, cob_accidente);
-    if (cob_accidente == true) {
+    cob_accidente = quiereCobAccidente.checked;
+    if (cob_accidente == true && !seleccionCob.find((object) => object.nombre === "Accidente")) { 
         const cobertura = new Cobertura("Accidente", sumaAccidente);
         cobertura.calcularPrima(tasa);
         seleccionCob.push(cobertura);
-        alert("Cobertura seleccionada correctamente");
+        console.log(seleccionCob);
+    } else if (cob_accidente == false && seleccionCob.find((object) => object.nombre === "Accidente")) {
+        seleccionCob.splice(seleccionCob.findIndex(object => {return object.nombre === "Accidente";}),1)
+        console.log(seleccionCob);
     } else {
-        alert("Cobertura no seleccionada");
+        return
     }
 }
 
 function elegirCobVida(seleccionCob) {
-    quiereCobVida = prompt("¿Desea tener cobertura por seguro de vida? Ingrese S o N").toUpperCase();
-    cob_vida = stringABool(quiereCobVida, cob_vida);
-    if (cob_vida == true) {
+    cob_vida = quiereCobVida.checked;
+    if (cob_vida == true && !seleccionCob.find((object) => object.nombre === "Vida")) {
         const cobertura = new Cobertura("Vida", sumaVida);
         cobertura.calcularPrima(tasa);
         seleccionCob.push(cobertura);
-        alert("Cobertura seleccionada correctamente");
+        console.log(seleccionCob);
+    } else if (cob_vida == false && seleccionCob.find((object) => object.nombre === "Vida")) {
+        seleccionCob.splice(seleccionCob.findIndex(object => {return object.nombre === "Vida";}),1)
+        console.log(seleccionCob);
     } else {
-        alert("Cobertura no seleccionada");
+        return
     }
 }
 
 function elegirCobSalud(seleccionCob) {
-    quiereCobSalud = prompt("¿Desea tener cobertura de medicina prepaga? Ingrese S o N").toUpperCase();
-    cob_salud = stringABool(quiereCobSalud, cob_salud);
-    if (cob_salud == true) {
+    cob_salud = quiereCobSalud.checked;
+    if (cob_salud == true && !seleccionCob.find((object) => object.nombre === "Salud")) {
         const cobertura = new Cobertura("Salud", sumaSalud);
         cobertura.calcularPrima(tasa);
         seleccionCob.push(cobertura);
-        alert("Cobertura seleccionada correctamente");
+        console.log(seleccionCob);
+    } else if (cob_salud == false && seleccionCob.find((object) => object.nombre === "Salud")){
+        seleccionCob.splice(seleccionCob.findIndex(object => {return object.nombre === "Salud";}),1)
+        console.log(seleccionCob);
     } else {
-        alert("Cobertura no seleccionada");
+        return
     }
+
 }
 
 //Definimos un array vacío, para guardar la selección del usuario
 const seleccionCob = [];
 
-//Bienvenida y preguntas iniciales
+// Función para obtener los datos ingresados en el front
 function obtenerDatos() {
-    edad = prompt("Comencemos ¿Qué edad tenés?");
     if (validarEdadYObtenerTasa(edad)) {
         elegirCobAccidente(seleccionCob);
         elegirCobVida(seleccionCob);
@@ -82,19 +88,8 @@ function obtenerDatos() {
     }
 }
 
+//Bienvenida
 alert("Bienvenido al simulador para cotizar tu seguro, pulsa 'aceptar' para iniciar tu cotización");
-//obtenerDatos();
-
-//Traducimos los datos ingresados a inputs para cotizar
-function stringABool(par1, par2) {
-    if (!(par1 == "S")) {
-        par2 = false;
-    } else {
-        par2 = true;
-    }
-    console.log(par1 + " " + par2);
-    return par2;
-}
 
 // Validamos edad y determinamos la tasa
 function validarEdadYObtenerTasa(edad) {
@@ -113,6 +108,28 @@ function validarEdadYObtenerTasa(edad) {
     }
 }
 
+// Escuchamos los cambios en la edad y validamos si puede cotizar o no
+inputEdad.onchange = () => {
+    edad = inputEdad.value; 
+    console.log(edad);
+    validarEdadYObtenerTasa(edad);
+};
+
+// Escuchamos los cambios en la cobertura por Accidentes y ejecutamos la función para agregar/quitar cobertura
+quiereCobAccidente.onchange = () => {
+    elegirCobAccidente(seleccionCob);
+};
+
+// Escuchamos los cambios en la cobertura por Vida y ejecutamos la función para agregar/quitar cobertura
+quiereCobVida.onchange = () => {
+    elegirCobVida(seleccionCob);
+};
+
+// Escuchamos los cambios en la cobertura por Salud y ejecutamos la función para agregar/quitar cobertura
+quiereCobSalud.onchange = () => {
+    elegirCobSalud(seleccionCob);
+};
+
 console.log(edad);
 console.log(cob_accidente);
 console.log(cob_vida);
@@ -125,7 +142,9 @@ console.log(seleccionCob);
 // Recorremos el array de coberturas seleccionadas, sumando la prima de cada una y calculando el Premio Total agreando el IVA
 function calcularPremio() {
     const primaTotal = seleccionCob.reduce((acc, el) => acc + el.prima, 0)
-    return premioTotal = primaTotal + primaTotal * iva;
+    premioTotal = primaTotal + primaTotal * iva;
+    console.log(premioTotal);
+    return premioTotal
 }
 
 // Función de Pago
@@ -153,12 +172,24 @@ function pago() {
     }
 }
 
-
-// Se llama a las funciones de cotización y pago, sólo en caso de que los datos obtenidos hayan sido válidos
-if (obtenerDatos() == true) {
-    premioTotal = calcularPremio();
-    console.log(premioTotal);
-    pago();
-} else {
-    console.log("No pudo cotizar");
+// Se define una función para cotizar y pagar, sólo en caso de que los datos obtenidos hayan sido válidos
+function quoteAndPay() {
+    if (obtenerDatos() == true) {
+        premioTotal = calcularPremio();
+        console.log(premioTotal);
+        console.log(seleccionCob);
+        pago();
+    } else {
+        console.log("No pudo cotizar");
+    }    
 }
+
+// Se llama a la cotización y pago con el evento Click del botón cotizar
+let myForm = document.getElementById("cotizar");
+myForm.addEventListener("click", quoteAndPay);
+
+
+
+
+
+
