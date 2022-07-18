@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,35 +10,119 @@
         integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-    <h1>Simulador Interactivo</h1>
-    <form action="" id="formulario">
-        <div class="form-floating">
-            <input type="number" class="form-control" id="edad" placeholder="Edad">
-            <label for="edad">Edad</label>
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="cob_accidente" checked>
-            <label class="form-check-label" for="cob_accidente">Accidente</label>
-            <input type="range" min="1" max="100" value="50" class="slider" id="suma_accidente">
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="cob_vida" checked>
-            <label class="form-check-label" for="cob_vida">Vida</label>
-            <input type="range" min="1" max="100" value="50" class="slider" id="suma_vida">
-        </div>
-        <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" role="switch" id="cob_salud" checked>
-            <label class="form-check-label" for="cob_salud">Prepaga</label>
-            <input type="range" min="1" max="100" value="50" class="slider" id="suma_salud">
-        </div>
-        <input class="btn btn-primary" type="button" value="Cotizar" id="cotizar">
 
-    </form>
+<body class="bg-light">
+    <div class="container">
+        <div class="row g-5 py-5">
+            <div class="col-md-5 col-lg-4 order-md-last">
+                <h4 class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="text-primary">Tu Selección</span>
+                    <span class="badge bg-primary rounded-pill" id="seleccion">3</span>
+                </h4>
+                <ul class="list-group mb-3">
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Accidente</h6>
+                            <small class="text-muted">Cobertura por lesiones</small>
+                        </div>
+                        <span class="text-muted">$<span id="premioAccidente">0</span></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Vida</h6>
+                            <small class="text-muted">Seguro de vida</small>
+                        </div>
+                        <span class="text-muted">$<span id="premioVida">0</span></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between lh-sm">
+                        <div>
+                            <h6 class="my-0">Prepaga</h6>
+                            <small class="text-muted">Cobertura de salud</small>
+                        </div>
+                        <span class="text-muted">$<span id="premioSalud">0</span></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between bg-light">
+                        <div class="text-success">
+                            <h6 class="my-0">Impuestos</h6>
+                            <small>IVA</small>
+                        </div>
+                        <span class="text-success">$<span id="ivaValor">0</span></span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between">
+                        <span>Total (ARS)</span>
+                        <p>$<strong id="premioTotal">0</strong></p>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-7 col-lg-8">
+                <h4 class="mb-3">Seleccionar Coberturas</h4>
+                <form class="needs-validation" novalidate="">
+                    <div class="row g-3">
+                        <div class="col-sm-12">
+                            <label for="edad" class="form-label">Edad</label>
+                            <input type="number" class="form-control" id="edad" placeholder="Edad" value="18">
+                            <div class="alert alert-danger" role="alert" id="edadError" hidden>
+                                Ingresar una edad válida
+                            </div>
+                        </div>
 
+                        <div class="form-check form-switch col-sm-12">
+                            <input class="form-check-input" type="checkbox" role="switch" id="cob_accidente" checked>
+                            <label class="form-check-label" for="cob_accidente">Accidente</label>
+                            <input type="range" min="100000" max="1000000" step="100000" class="slider col-sm-12"
+                                id="suma_accidente">
+                        </div>
+
+                        <div class="form-check form-switch col-sm-12">
+                            <input class="form-check-input" type="checkbox" role="switch" id="cob_vida" checked>
+                            <label class="form-check-label" for="cob_vida">Vida</label>
+                            <input type="range" min="100000" max="1000000" step="100000" class="slider col-sm-12"
+                                id="suma_vida">
+                        </div>
+
+                        <div class="form-check form-switch col-sm-12">
+                            <input class="form-check-input" type="checkbox" role="switch" id="cob_salud" checked>
+                            <label class="form-check-label" for="cob_salud">Prepaga</label>
+                            <input type="range" min="50000" max="250000" step="50000" class="slider col-sm-12"
+                                id="suma_salud">
+                        </div>
+
+                        <hr class="my-4">
+
+                        <h4 class="mb-3">Pago</h4>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="cc-name" class="form-label">Cuotas</label>
+                                <select class="form-select" id="cuotas" required="">
+                                    <option value="">Hasta 12 cuotas</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                                <small class="text-muted">TNA 65%</small>
+                            </div>
+                        </div>
+
+                        <hr class="my-4">
+                        <!-- <input class="w-100 btn btn-primary btn-lg" type="button" value="Cotizar" id="cotizar"> -->
+                </form>
+            </div>
+        </div>
+    </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous">
     </script>
     <script src="js/main.js"></script>
 </body>
+
 </html>
