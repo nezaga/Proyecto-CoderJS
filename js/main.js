@@ -1,14 +1,11 @@
 //Inicializamos las variables para cotizar
 let edad = 18;
 let inputEdad = document.getElementById("edad");
-let cob_accidente = true;
-let cob_vida = true;
-let cob_salud = true;
+let cob_accidente = getUserSelection("storageAccidente");
+let cob_vida = getUserSelection("storageVida");
+let cob_salud = getUserSelection("storageSalud");
 let tasa;
 let iva = 0.21;
-let quiereCobAccidente = document.getElementById("cob_accidente");
-let quiereCobVida = document.getElementById("cob_vida");
-let quiereCobSalud = document.getElementById("cob_salud");
 let sumaAccidente = 0;
 let sumaVida = 0;
 let sumaSalud = 0;
@@ -29,7 +26,7 @@ class Cobertura {
 
 // Creo los 3 objetos Coberturas y se agrega al array
 function elegirCobAccidente(seleccionCob) {
-    cob_accidente = quiereCobAccidente.checked;
+    cob_accidente = document.getElementById("cob_accidente").checked;
     if (cob_accidente == true && !seleccionCob.find((object) => object.nombre === "Accidente")) {
         seleccionCob.splice(seleccionCob.findIndex(object => {
             return object.nombre === "Accidente";
@@ -44,10 +41,11 @@ function elegirCobAccidente(seleccionCob) {
     } else {
         return
     }
+    saveUserSelection("storageAccidente", cob_accidente);
 }
 
 function elegirCobVida(seleccionCob) {
-    cob_vida = quiereCobVida.checked;
+    cob_vida = document.getElementById("cob_vida").checked;
     if (cob_vida == true && !seleccionCob.find((object) => object.nombre === "Vida")) {
         seleccionCob.splice(seleccionCob.findIndex(object => {
             return object.nombre === "Vida";
@@ -62,10 +60,11 @@ function elegirCobVida(seleccionCob) {
     } else {
         return
     }
+    saveUserSelection("storageVida", cob_vida);
 }
 
 function elegirCobSalud(seleccionCob) {
-    cob_salud = quiereCobSalud.checked;
+    cob_salud = document.getElementById("cob_salud").checked;
     if (cob_salud == true && !seleccionCob.find((object) => object.nombre === "Salud")) {
         const cobertura = new Cobertura("Salud", document.getElementById("suma_salud").value);
         cobertura.calcularPrima(tasa);
@@ -77,7 +76,7 @@ function elegirCobSalud(seleccionCob) {
     } else {
         return
     }
-
+    saveUserSelection("storageSalud", cob_salud);
 }
 
 // Función para obtener los datos ingresados en el front
@@ -98,8 +97,9 @@ function validarEdadYObtenerTasa(edad) {
     let edadError = document.getElementById("edadError");
     if (edad < 18) {
         let error = "No tenés edad para contratar un seguro, lo sentimos.";
-        edadError.innerText = error;
-        edadError.hidden = false;
+        showError(error);
+        //edadError.innerText = error;
+        //edadError.hidden = false;
         return false;
     } else if ((edad >= 18) && (edad < 45)) {
         edadError.hidden = true;
@@ -111,19 +111,32 @@ function validarEdadYObtenerTasa(edad) {
         return true;
     } else {
         let error = "Superaste la edad de asegurabilidad, lo sentimos.";
-        edadError.innerText = error;
-        edadError.hidden = false;
+        showError(error);
+        //edadError.innerText = error;
+        //edadError.hidden = false;
         return false;
     }
 }
 
+// Funciones para guardar y obtener selección desde el Local Storage
+function getUserSelection(storageName) {
+    return JSON.parse(localStorage.getItem(storageName));
+}
+
+function saveUserSelection(storageName, value) {
+    localStorage.setItem(storageName, value);
+}
+
+
 //Definimos un array vacío, para guardar la selección del usuario
 const seleccionCob = [];
 
-//Llenamos el array con la primera selección por default
-obtenerDatos();
-
-
+// Renderizamos el front con lo guardado en la Local Storage
+if (localStorage.length > 0) {
+    document.getElementById("cob_accidente").checked = cob_accidente;
+    document.getElementById("cob_vida").checked = cob_vida;
+    document.getElementById("cob_salud").checked = cob_salud;
+}
 
 // Escuchamos los cambios en la edad y validamos si puede cotizar o no
 inputEdad.onchange = () => {
@@ -186,7 +199,14 @@ function quoteAndPay() {
     }
 }
 
+// Función para mostrar alert de error
+function showError(error) {
+    Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: error,
+})};
+
 // Se llama a la cotización y pago ante cualquier cambio que suceda en el Form
 var form = document.querySelector('form');
 form.addEventListener('change', quoteAndPay);
-
