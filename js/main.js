@@ -14,7 +14,7 @@ let ivaValor = 0;
 
 // Definimos función para renderizar coberturas en el front. Obtenidas desde el archivo coberturas.json. Se obtienen los datos de la Local Storage únicamente después que se ejecute el fetch.
 function fetchCoberturas() {
-    fetch('../data/coberturas.json')
+    fetch('data/coberturas.json')
         .then((res) => res.json())
         .then((data) => {
             let resultado = document.getElementById("coberturas");
