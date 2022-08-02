@@ -1,0 +1,5 @@
+[
+    {"nombre": "Accidente", "check_id": "cob_accidente", "range_id": "suma_accidente", "range_min": "100000", "range_max": "1000000", "range_step": "100000"},
+    {"nombre": "Vida", "check_id": "cob_vida", "range_id": "suma_vida", "range_min": "100000", "range_max": "1000000", "range_step": "100000"},
+    {"nombre": "Prepaga", "check_id": "cob_salud", "range_id": "suma_salud", "range_min": "50000", "range_max": "250000", "range_step": "50000"}
+]

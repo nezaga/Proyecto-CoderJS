@@ -12,6 +12,36 @@ let sumaSalud = 0;
 let tna = 0.65;
 let ivaValor = 0;
 
+// Definimos función para renderizar coberturas en el front. Obtenidas desde el archivo coberturas.json. Se obtienen los datos de la Local Storage únicamente después que se ejecute el fetch.
+function fetchCoberturas() {
+    fetch('../data/coberturas.json')
+        .then((res) => res.json())
+        .then((data) => {
+            let resultado = document.getElementById("coberturas");
+            let contenido = "";
+
+            data.forEach(cobertura => {
+                contenido += 
+                `<div class="form-check form-switch col-sm-12">
+                    <input class="form-check-input" type="checkbox" role="switch" id=${cobertura.check_id}>
+                    <label class="form-check-label" for=${cobertura.check_id}>${cobertura.nombre}</label>
+                    <input type="range" min=${cobertura.range_min} max=${cobertura.range_max} step=${cobertura.range_step} class="slider col-sm-12"
+                    id=${cobertura.range_id}>
+                </div>`;
+            })    
+            
+            resultado.innerHTML = contenido;
+        })
+        .then(() => {
+            if (localStorage.length > 0) {
+                console.log("empezó la busqueda del local storage");
+                document.getElementById("cob_accidente").checked = cob_accidente;
+                document.getElementById("cob_vida").checked = cob_vida;
+                document.getElementById("cob_salud").checked = cob_salud;
+            }            
+        });
+}
+
 //Definimos la clase Cobertura.
 class Cobertura {
     constructor(nombre, SA) {
@@ -131,12 +161,8 @@ function saveUserSelection(storageName, value) {
 //Definimos un array vacío, para guardar la selección del usuario
 const seleccionCob = [];
 
-// Renderizamos el front con lo guardado en la Local Storage
-if (localStorage.length > 0) {
-    document.getElementById("cob_accidente").checked = cob_accidente;
-    document.getElementById("cob_vida").checked = cob_vida;
-    document.getElementById("cob_salud").checked = cob_salud;
-}
+// Llamamos la función para renderizar el front. Coberturas y LocalStorage.
+fetchCoberturas();
 
 // Escuchamos los cambios en la edad y validamos si puede cotizar o no
 inputEdad.onchange = () => {
